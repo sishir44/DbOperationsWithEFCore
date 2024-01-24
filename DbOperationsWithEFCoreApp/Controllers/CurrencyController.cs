@@ -24,8 +24,30 @@ namespace DbOperationsWithEFCoreApp.Controllers
 
             var result =   await (from currencies in _appDbContext.Currencies select currencies).ToListAsync();
             return Ok(result);
-
         }
 
+        // get 1 record using Name
+        [HttpGet("{name}/{description}")]
+        public async Task<IActionResult> GetCurrencyByNameAsyns([FromRoute] string name, [FromRoute] string? description)
+        {
+            var result = await _appDbContext.Currencies
+                .FirstOrDefaultAsync(x =>
+                x.Title == name &&
+                (string.IsNullOrEmpty(description) || x.Description == description));
+            return Ok(result);
+        }
+
+        // Get all records using multiple parameter
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetCurrencyListByNameAsyns([FromRoute] string name, [FromQuery] string? description)
+        {
+            // High perfoemance
+            var result = await _appDbContext.Currencies
+                .Where(x => 
+                x.Title == name &&
+                (string.IsNullOrEmpty(description) || x.Description == description)).ToListAsync();
+            return Ok(result);
+        }
     }
+
 }

@@ -25,12 +25,12 @@ namespace DbOperationsWithEFCoreApp.Controllers
         }
 
         // get record using Primary Key
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetLanguageByIdAsyns([FromRoute] int id)
         {
             var result = await _appDbContext.Languages.FindAsync(id);
             return Ok(result);
         }
-
     }
+
 }
